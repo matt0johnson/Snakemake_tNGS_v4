@@ -1,0 +1,16 @@
+rule bwa_mem:
+	output:
+		"{workbatch}/assembly/{sample}.sam"
+	threads:
+		8
+	params:
+		"@RG\tID:{sample}\tSM:{sample}"
+	log:
+		"{workbatch}/logs/{sample}.log"
+	run:
+		forward = config["samples"][wildcards.sample][0],
+                reverse = config["samples"][wildcards.sample][1],
+		fastqpath = config["samples"][wildcards.sample][5],
+		reference_genome = config["reference_genome"]
+		shell("{bwa} mem -M -t {threads} {reference_genome} -R '{params}' {fastqpath}/{forward} {fastqpath}/{reverse} > {output} 2>{log}")
+

@@ -1,0 +1,9 @@
+rule create_gVCF:
+   input: 
+      "{workbatch}/assembly/{sample}.realigned.bam"
+   output:
+      "{workbatch}/gVCF/{sample}.separate.gVCF"
+   log:
+      "{workbatch}/logs/{sample}.java.log"
+   shell:
+      "{java} -Djava.io.tmpdir=/mnt/Data3/tmp -Xmx8g -jar {gatk} -T HaplotypeCaller --emitRefConfidence GVCF --variant_index_type LINEAR --variant_index_parameter 128000 -R {fa} -rf BadCigar -maxAltAlleles 2 -stand_call_conf 50.0 -stand_emit_conf 30.0 -L {intervals} -I {input} -o {output}"

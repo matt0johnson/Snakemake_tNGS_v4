@@ -1,0 +1,7 @@
+rule sam_to_bam:
+  input:
+    "{workbatch}/assembly/{sample}.sam"
+  output:
+    "{workbatch}/assembly/{sample}.converted.bam"
+  shell:
+    "{java} -Xmx4g -jar {picard} SamFormatConverter I={input} O={output} VALIDATION_STRINGENCY=SILENT"

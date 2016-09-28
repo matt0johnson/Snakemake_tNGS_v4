@@ -1,0 +1,9 @@
+rule combine_gVCFs:
+   input:
+     samples=expand("{workbatch}/gVCF/{sample}.separate.gVCF",workbatch=config["workbatch"],sample=config["samples"]),
+     list="{workbatch}/sample_gVCF.list"
+   output:
+     vcf="{workbatch}/gVCF/{batchID}.combined.gVCF",
+     index="{workbatch}/gVCF/{batchID}.combined.gVCF.idx"
+   run:
+     shell ("{java} -Xmx8g -jar {gatk} -T CombineGVCFs -R {fa} -log {workbatch}/log/combinedgVCF.log -V {input.list} -o {output.vcf}")

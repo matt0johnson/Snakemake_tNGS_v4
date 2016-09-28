@@ -1,0 +1,9 @@
+rule sortsam:
+   input:
+      "{workbatch}/assembly/{sample}.fixmate.bam"
+   output:
+      "{workbatch}/assembly/{sample}.converted.fixmate.sorted.bam"
+   log:
+      "{workbatch}/logs/{sample}.log"
+   shell:
+      "{java} -Xmx4g -jar {picard} SortSam I={input} O={output} SORT_ORDER=coordinate VALIDATION_STRINGENCY=SILENT CREATE_INDEX=true"

@@ -1,0 +1,12 @@
+rule alamutannotate:
+    input:
+        vcf="{workbatch}/gVCF/{batchID}.combined.filtered.gVCF",
+        index="{workbatch}/gVCF/{batchID}.combined.filtered.gVCF.idx"
+    output:
+        ann="{workbatch}/variants/{batchID}_annotated.txt",
+        unann="{workbatch}/variants/{batchID}_unannotated.txt"
+    run:
+        hgmduser = config["hgmduser"]
+        hgmdpass = config["hgmdpass"]
+        shell("{alamut} --hgmdUser {hgmduser} --hgmdPasswd {hgmdpass} --in {input.vcf} --ann {output.ann} --unann {output.unann} --alltrans \
+        --ssIntronicRange 2 --outputVCFInfo AC AF AN DP FS MQ MQ0 QD --outputVCFGenotypeData AD DP GQ GT PL --outputVCFQuality --outputVCFFilter 2>>{log}")

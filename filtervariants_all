@@ -1,0 +1,13 @@
+rule filtervariants_all:
+    input:
+        vcf="{workbatch}/gVCF/{batchID}.combined.gVCF",
+        index="{workbatch}/gVCF/{batchID}.combined.gVCF.idx"
+    output:
+        vcf=temp("{workbatch}/gVCF/{batchID}.combined.filtered.gVCF"),
+        index=temp("{workbatch}/gVCF/{batchID}.combined.filtered.gVCF.idx")
+    log:
+        "{workbatch}/logs/batchID.log"
+    shell:
+        "{java} -Xmx4g -jar {gatk} -T VariantFiltration -R {fa} --filterExpression 'QD < 2.0' --filterName 'QD2' --filterExpression 'MQ < 40.0' \
+         --filterName 'MQ40' --filterExpression 'ReadPosRankSum < -8.0' --filterName 'RPRS-8' --filterExpression 'FS > 60.0' --filterName 'FS60' \
+         --filterExpression 'MQRankSum < -12.5' --filterName 'MQRankSum-12.5' -o {output.vcf} --variant {input.vcf} 2>>{log}"
